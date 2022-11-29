@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {useAppNavigation} from '../../types/types';
-import Card from '../../components/Card/Card';
 import {ImageType} from '../../types';
-import {fetchListPhotos} from '../../store/middleware/photos';
 import {useAppDispatch, useAppSelector} from '../../store';
 import {photosSelectors} from '../../store/slices/photosSlice';
+import {Card} from '../../components';
+import {fetchListPhotos} from '../../store/middleware';
 
-const HomePage = () => {
+export const HomeScreen = () => {
   const photosArr = useAppSelector(photosSelectors.images);
   const nav = useAppNavigation();
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ const HomePage = () => {
   }, [dispatch]);
 
   const onSignUpPress = (id: string) => {
-    nav.navigate('ImagePage', {id});
+    nav.navigate('ImageScreen', {id});
   };
 
   const renderItem = ({item}) => (
@@ -37,8 +37,6 @@ const HomePage = () => {
     </SafeAreaView>
   );
 };
-
-export default HomePage;
 
 const styles = StyleSheet.create({
   sectionContainer: {

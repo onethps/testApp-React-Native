@@ -13,7 +13,7 @@ import {ImagePageProps} from '../../types';
 import {useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 
-const ImagePage = ({route}: ImagePageProps) => {
+export const ImageScreen = ({route}: ImagePageProps) => {
   const {id} = route.params;
   const dispatch = useAppDispatch();
 
@@ -27,7 +27,7 @@ const ImagePage = ({route}: ImagePageProps) => {
     dispatch(fetchCurrentPhoto({id}));
 
     () => imageActions.clearImg();
-  }, [id]);
+  }, [id, dispatch]);
 
   if (loading) {
     return (
@@ -55,8 +55,6 @@ const ImagePage = ({route}: ImagePageProps) => {
     </SafeAreaView>
   );
 };
-
-export default ImagePage;
 
 const styles = StyleSheet.create({
   sectionContainer: {

@@ -25,7 +25,7 @@ const {actions, reducer} = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(fetchListPhotos.pending, (state) => {
+    builder.addCase(fetchListPhotos.pending, state => {
       state.loading = true;
     });
     builder.addCase(fetchListPhotos.fulfilled, (state, {payload}) => {
@@ -38,7 +38,6 @@ const {actions, reducer} = createSlice({
     });
   },
 });
-
 
 export const imageActions = {
   ...actions,

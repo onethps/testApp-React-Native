@@ -1,17 +1,28 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomePage from '../pages/HomePage/HomePage';
-import ImagePage from '../pages/ImagePage/ImagePage';
 
-const Stack = createNativeStackNavigator();
+import {RootStackParamList} from '../types';
+import {HomeScreen, ImageScreen} from '../screens';
 
-const HomeStackNavigator = () => {
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+export const HomeStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name={'HomePage'} component={HomePage} />
-      <Stack.Screen name={'ImagePage'} component={ImagePage} />
+      <Stack.Screen
+        name={'HomeScreen'}
+        component={HomeScreen}
+        options={{
+          title: 'Home',
+        }}
+      />
+      <Stack.Screen
+        name={'ImageScreen'}
+        component={ImageScreen}
+        options={{
+          title: 'Image',
+        }}
+      />
     </Stack.Navigator>
   );
 };
-
-export default HomeStackNavigator;
