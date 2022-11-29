@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Button,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -13,7 +14,7 @@ import {ImagePageProps} from '../../types';
 import {useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 
-export const ImageScreen = ({route}: ImagePageProps) => {
+export const ImageScreen = ({navigation, route}: ImagePageProps) => {
   const {id} = route.params;
   const dispatch = useAppDispatch();
 
@@ -21,13 +22,15 @@ export const ImageScreen = ({route}: ImagePageProps) => {
   const loading = useSelector(photosSelectors.loadingImage);
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
-  console.log(photo);
-
   useEffect(() => {
     dispatch(fetchCurrentPhoto({id}));
 
-    () => imageActions.clearImg();
-  }, [id, dispatch]);
+    const unsubscribe = () => {
+      dispatch(imageActions.clearImg());
+    };
+
+    return unsubscribe;
+  }, [id, dispatch, navigation]);
 
   if (loading) {
     return (
@@ -46,9 +49,6 @@ export const ImageScreen = ({route}: ImagePageProps) => {
         source={{
           uri: photo?.urls?.regular,
         }}
-        onProgress={e =>
-          console.log(e.nativeEvent.loaded / e.nativeEvent.total)
-        }
         onLoadStart={() => setLoadingImage(true)}
         onLoadEnd={() => setLoadingImage(false)}
       />
