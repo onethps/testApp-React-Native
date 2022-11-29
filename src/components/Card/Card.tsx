@@ -9,13 +9,15 @@ type ImageType = {
 };
 
 type Props = {
-  onImagePress: () => void;
+  onImagePress: (id: string) => void;
   item: ImageType;
 };
 
 const Card: FC<Props> = ({onImagePress, item}) => {
   return (
-    <TouchableOpacity style={{padding: 5}} onPress={() => onImagePress()}>
+    <TouchableOpacity
+      style={{padding: 5}}
+      onPress={() => onImagePress(item.id)}>
       <Image
         style={{width: '100%', height: 200, borderRadius: 10}}
         source={{uri: item.urls.thumb}}

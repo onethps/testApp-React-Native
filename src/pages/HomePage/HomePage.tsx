@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {useAppNavigation} from '../../types/types';
 import Card from '../../components/Card/Card';
@@ -9,7 +9,7 @@ import {photosSelectors} from '../../store/slices/photosSlice';
 import {useSelector} from 'react-redux';
 
 const HomePage = () => {
-  const photosArr = useSelector(photosSelectors.photos);
+  const photosArr = useSelector(photosSelectors.images);
   const nav = useAppNavigation();
   const dispatch = useAppDispatch();
 
@@ -17,18 +17,18 @@ const HomePage = () => {
     dispatch(fetchListPhotos() as any);
   }, [dispatch]);
 
-  const onSignUpPress = () => {
-    nav.navigate('ImagePage');
+  const onSignUpPress = (id: string) => {
+    nav.navigate('ImagePage', {id});
   };
 
   const renderItem = ({item}) => (
-    <View style={{flex: 1}}>
+    <View style={styles.sectionContainer}>
       <Card item={item} onImagePress={onSignUpPress} />
     </View>
   );
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.sectionContainer}>
       <FlatList
         data={photosArr}
         numColumns={2}
@@ -43,19 +43,6 @@ export default HomePage;
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+    flex: 1,
   },
 });

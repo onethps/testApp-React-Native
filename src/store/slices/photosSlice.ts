@@ -1,14 +1,17 @@
+import {fetchCurrentPhoto} from './../middleware/photos';
 import {RootState} from './../index';
 import {createSlice, createSelector} from '@reduxjs/toolkit';
 import {ImageType} from '../../types';
 import {fetchListPhotos} from '../middleware/photos';
 
-const initialState = {
-  isLoadingPhoto: false,
-  isLoadingPhotos: false,
-  isLoadingRandomPhotos: false,
-  photos: [] as ImageType[],
-  randomPhotos: [],
+type initType = {
+  images: ImageType[];
+  image: null | ImageType;
+};
+
+const initialState: initType = {
+  images: [],
+  image: null,
 };
 
 const {actions, reducer} = createSlice({
@@ -17,14 +20,19 @@ const {actions, reducer} = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchListPhotos.fulfilled, (state, {payload}) => {
-      state.photos = payload;
+      state.images = payload;
+    });
+    builder.addCase(fetchCurrentPhoto.fulfilled, (state, {payload}) => {
+      state.image = payload;
     });
   },
 });
 
-const selectRoot = (state: RootState) => state.photos;
+const selectRoot = (state: RootState) => state.images;
+
 export const photosSelectors = {
-  photos: createSelector(selectRoot, state => state.photos),
+  images: createSelector(selectRoot, state => state.images),
+  image: createSelector(selectRoot, state => state.image),
 };
 
-export const photosReducer = reducer;
+export const imageReducer = reducer;
