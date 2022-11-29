@@ -8,30 +8,28 @@ import {
 } from 'react-native';
 import {useAppDispatch} from '../../store';
 import {fetchCurrentPhoto} from '../../store/middleware/photos';
-import {photosSelectors} from '../../store/slices/photosSlice';
+import {imageActions, photosSelectors} from '../../store/slices/photosSlice';
 import {ImagePageProps} from '../../types';
 import {useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
-
-import Image from 'react-native-image-progress';
-import ProgressBar from 'react-native-progress/Bar';
 
 const ImagePage = ({route}: ImagePageProps) => {
   const {id} = route.params;
   const dispatch = useAppDispatch();
 
-  const [isLoaded, setisLoaded] = useState(0);
-
   const photo = useSelector(photosSelectors.image);
+  const loading = useSelector(photosSelectors.loadingImage);
+  const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
-  console.log(photo?.urls);
+  console.log(photo);
 
   useEffect(() => {
-    dispatch(fetchCurrentPhoto({id}) as any);
-    console.log(id);
+    dispatch(fetchCurrentPhoto({id}));
+
+    () => imageActions.clearImg();
   }, [id]);
 
-  if (!photo) {
+  if (loading) {
     return (
       <View style={styles.sectionContainer}>
         <Text>Loading</Text>
@@ -40,17 +38,19 @@ const ImagePage = ({route}: ImagePageProps) => {
   }
   return (
     <SafeAreaView style={styles.sectionContainer}>
-      <ActivityIndicator size="small" color="#FFD700" />
+      {loadingImage && (
+        <ActivityIndicator style={styles.loader} size="large" color="#000000" />
+      )}
       <FastImage
         style={styles.imageStyle}
         source={{
           uri: photo?.urls?.regular,
-          priority: FastImage.priority.high,
         }}
-        resizeMode={FastImage.resizeMode.cover}
-        onProgress={e => (
-          <ProgressBar progress={e.nativeEvent.loaded} width={200} />
-        )}
+        onProgress={e =>
+          console.log(e.nativeEvent.loaded / e.nativeEvent.total)
+        }
+        onLoadStart={() => setLoadingImage(true)}
+        onLoadEnd={() => setLoadingImage(false)}
       />
     </SafeAreaView>
   );
@@ -61,6 +61,12 @@ export default ImagePage;
 const styles = StyleSheet.create({
   sectionContainer: {
     flex: 1,
+  },
+  loader: {
+    justifyContent: 'center',
+
+    width: '100%',
+    height: '100%',
   },
   imageStyle: {
     width: '100%',

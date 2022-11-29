@@ -4,17 +4,16 @@ import {useAppNavigation} from '../../types/types';
 import Card from '../../components/Card/Card';
 import {ImageType} from '../../types';
 import {fetchListPhotos} from '../../store/middleware/photos';
-import {useAppDispatch} from '../../store';
+import {useAppDispatch, useAppSelector} from '../../store';
 import {photosSelectors} from '../../store/slices/photosSlice';
-import {useSelector} from 'react-redux';
 
 const HomePage = () => {
-  const photosArr = useSelector(photosSelectors.images);
+  const photosArr = useAppSelector(photosSelectors.images);
   const nav = useAppNavigation();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchListPhotos() as any);
+    dispatch(fetchListPhotos());
   }, [dispatch]);
 
   const onSignUpPress = (id: string) => {
